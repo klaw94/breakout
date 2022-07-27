@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Break Out</title>
+    <style>
+ body {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      h1 {
+        text-align: center;
+        margin: 20px 10px 50px 10px;
+      }
+      #board {
+        position: absolute;
+        margin-left: auto;
+        margin-right: auto;
+        left: 0;
+        right: 0;
+        height: 480px;
+        width: 665px;
+        border: solid 1px black;
+
+      }
+      .block{
+        position: absolute;
+        width: 60px;
+        height: 20px;
+        background-color: blue;
+        border: solid 1px black;
+        margin: 0;
+    }
+
+    .user{
+        position: absolute;
+        width: 100px;
+        height: 20px;
+        background-color: palevioletred;
+        border: solid 1px black;
+        margin: 0;
+    }
+
+    .ball{
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: red;
+      border: solid 1px black;
+      margin: 0;
+    }
+
+    </style>
+</head>
+<body>
+    <h1>Break Out 🔨</h1>
+    <div id="board">
+     
+      </div>
+    </div>
+    <script src="breakjs.js"></script>    
+</body>
+</html>
