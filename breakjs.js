@@ -5,6 +5,12 @@ const user = document.createElement("div");
 const ball = document.createElement("div");
 const startingPosition = [40, 10];
 let currentPosition = startingPosition;
+const userWidth = 100;
+const blockHeight = 20;
+const blockWidth = 60;
+const bordWidth = 655;
+const bordHeigth = 470;
+
 document.addEventListener("keydown", (e) => {
     moveUser(e)
 });
@@ -94,6 +100,9 @@ function moveUser(e){
                 refreshUserPosition();
             }
             break;
+        case ' ':
+            window.location.reload();
+            break;
     }
 
 }
@@ -109,39 +118,39 @@ function moveTheBallDown(num){
     if (currentPBall[1] == 0){
         document.querySelector("h1").innerHTML = "You lost! 😣";
         return;
-    } else if(currentPBall[1] == 30 && currentPBall[0] >= currentPosition[0] - 5 && currentPBall[0] <= currentPosition[0] + 105){
-        if(currentPBall[0] >= currentPosition[0] + 40 && currentPBall[0] <= currentPosition[0] + 100 - 40){
+    } else if(currentPBall[1] == 30 && currentPBall[0] >= currentPosition[0] - 10 && currentPBall[0] <= currentPosition[0] + userWidth + 5){
+        if(currentPBall[0] >= currentPosition[0] + 40 && currentPBall[0] <= currentPosition[0] + userWidth - 40){
             setTimeout(moveTheBallUp, 20, 0);
             return;
-        } else if(currentPBall[0] > currentPosition[0] - 5 && currentPBall[0] < currentPosition[0] + 100 - 60){
+        } 
+        else if(currentPBall[0] >= currentPosition[0] - 10 && currentPBall[0] < currentPosition[0] + userWidth - 60){
             setTimeout(moveTheBallUp, 20, 5);
             return;
-        } else if(currentPBall[0] > currentPosition[0] + 60 && currentPBall[0] < currentPosition[0] + 105){
+        } else if(currentPBall[0] > currentPosition[0] + 60 && currentPBall[0] <= currentPosition[0] + userWidth + 5){
             setTimeout(moveTheBallUp, 20, -5);
             return;
         }
 
-    } else if(currentPBall[1] < 30 && currentPBall[1] > 10) {
-        if  (currentPBall[0] == currentPosition[0]) {
+    } else if(currentPBall[1] < 30 && currentPBall[1] > 10 && (currentPBall[0] == currentPosition[0] -5 || currentPBall[0] == currentPosition[0] + userWidth + 5)) {
+        if(currentPBall[0] == currentPosition[0] -5) {
             setTimeout(moveTheBallUp, 20, -5);
             return;
-        } else if(currentPBall[0] == currentPosition[0] + 105) {
+        } else if(currentPBall[0] == currentPosition[0] + userWidth + 5) {t
             setTimeout(moveTheBallUp, 20, 5);
             return;
         }
-        
     }
     
     for(i = 0; i < blocks.length; i++){
-        if (currentPBall[1] >= blocks[i].bottom && currentPBall[1] <= blocks[i].bottom + 25 && currentPBall[0] == blocks[i].left){
+        if (currentPBall[1] >= blocks[i].bottom && currentPBall[1] <= blocks[i].bottom + blockHeight + 5 && currentPBall[0] == blocks[i].left){
             hitBlock(i);
             setTimeout(moveTheBallDown, 20, -5);
             return;
-        } else if(currentPBall[1] >= blocks[i].bottom && currentPBall[1] <= blocks[i].bottom + 25 && currentPBall[0] == blocks[i].rightCorner){
+        } else if(currentPBall[1] >= blocks[i].bottom && currentPBall[1] <= blocks[i].bottom + blockHeight + 5 && currentPBall[0] == blocks[i].rightCorner){
             hitBlock(i);
             setTimeout(moveTheBallDown, 20, 5);
             return;
-        } else if  (currentPBall[1] == blocks[i].bottom + 20 && currentPBall[0] >= blocks[i].left -5 && currentPBall[0] <= blocks[i].rightCorner) {
+        } else if(currentPBall[1] == blocks[i].bottom + blockHeight && currentPBall[0] >= blocks[i].left -5 && currentPBall[0] <= blocks[i].rightCorner + 5) {
             hitBlock(i);
             setTimeout(moveTheBallUp, 20, num);
             return;
@@ -151,12 +160,13 @@ function moveTheBallDown(num){
     if (currentPBall[0] == 0){
         setTimeout(moveTheBallDown, 20, 5);
         return;
-    } else if (currentPBall[0] == 655){
+    } else if (currentPBall[0] == bordWidth){
         setTimeout(moveTheBallDown, 20, -5);
         return;
-    } else {
-        setTimeout(moveTheBallDown, 20, num);
-    }
+    } 
+    
+    setTimeout(moveTheBallDown, 20, num);
+
 }
 
 function moveTheBallUp(num){
@@ -173,11 +183,11 @@ function moveTheBallUp(num){
             hitBlock(i);
             setTimeout(moveTheBallDown, 20, num);
             return;
-        } else if(currentPBall[1] >= blocks[i].bottom && currentPBall[1] <= blocks[i].bottom + 25 && currentPBall[0] == blocks[i].left){
+        } else if(currentPBall[1] >= blocks[i].bottom && currentPBall[1] <= blocks[i].bottom + blockHeight + 5 && currentPBall[0] == blocks[i].left){
             hitBlock(i);
             setTimeout(moveTheBallUp, 20, -5);
             return;
-        } else if(currentPBall[1] >= blocks[i].bottom && currentPBall[1] <= blocks[i].bottom + 25 && currentPBall[0] == blocks[i].rightCorner){
+        } else if(currentPBall[1] >= blocks[i].bottom && currentPBall[1] <= blocks[i].bottom + blockHeight + 5 && currentPBall[0] == blocks[i].rightCorner){
             hitBlock(i);
             setTimeout(moveTheBallUp, 20, 5);
             return;
@@ -187,10 +197,10 @@ function moveTheBallUp(num){
     if (currentPBall[0] == 0){
         setTimeout(moveTheBallUp, 20, 5);
         return;
-    } else if (currentPBall[0] == 655){
+    } else if (currentPBall[0] == bordWidth){
         setTimeout(moveTheBallUp, 20, -5);
         return;
-    } else if (currentPBall[1] == 470){
+    } else if (currentPBall[1] == bordHeigth){
         setTimeout(moveTheBallDown, 20, num);       
     } else {
         setTimeout(moveTheBallUp, 20, num);
@@ -205,10 +215,10 @@ function hitBlock(i){
     } else {
         document.getElementById(i).remove();
         visualBlocks.splice(i, 1);
-        blocks[i].bottom = 0;
-        blocks[i].left = 0;
+        blocks[i].bottom = -5780;
+        blocks[i].left = -5780;
        
-    }
+   }
 }
 
 function checkForWin(){
