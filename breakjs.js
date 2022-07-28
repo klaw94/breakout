@@ -74,7 +74,7 @@ function moveUser(e){
     switch(e.key){
         case 'ArrowLeft': 
             if (!gameStarted){
-                moveTheBallDown(0);
+                moveTheBall(0, -5);
                 gameStarted = true;
                 return gameStarted;
             }
@@ -88,7 +88,7 @@ function moveUser(e){
             break;
         case 'ArrowRight': 
             if (!gameStarted){
-                moveTheBallDown(0);
+                moveTheBall(0, -5);
                 gameStarted = true;
                 return gameStarted;
             }
@@ -107,105 +107,78 @@ function moveUser(e){
 
 }
 
-function moveTheBallDown(num){
+function moveTheBall(hor, ver){
     if (checkForWin()){
         document.querySelector("h1").innerHTML = "Congrats you won! 😃"
         return;
-        }
-    currentPBall[0] += num;
-    currentPBall[1] -= 5;
+    }
+    currentPBall[0] += hor;
+    currentPBall[1] += ver;
     refreshBallPosition();
+    //Check if I hit the user
     if (currentPBall[1] == 0){
         document.querySelector("h1").innerHTML = "You lost! 😣";
         return;
-    } else if(currentPBall[1] == 30 && currentPBall[0] >= currentPosition[0] - 10 && currentPBall[0] <= currentPosition[0] + userWidth + 5){
-        if(currentPBall[0] >= currentPosition[0] + 40 && currentPBall[0] <= currentPosition[0] + userWidth - 40){
-            setTimeout(moveTheBallUp, 20, 0);
+    } else if(currentPBall[1] === 30 && currentPBall[0] >= currentPosition[0] - 10 && currentPBall[0] <= currentPosition[0] + userWidth + 5){
+        if(currentPBall[0] >= currentPosition[0] + userWidth/3 && currentPBall[0] <= currentPosition[0] + userWidth - userWidth/3){
+            setTimeout(moveTheBall, 20, 0, getOpposite(ver));
             return;
         } 
-        else if(currentPBall[0] >= currentPosition[0] - 10 && currentPBall[0] < currentPosition[0] + userWidth - 60){
-            setTimeout(moveTheBallUp, 20, 5);
+        else if(currentPBall[0] >= currentPosition[0] - 10 && currentPBall[0] < currentPosition[0] + userWidth - userWidth/3 * 2){
+            setTimeout(moveTheBall, 20, 5, getOpposite(ver));
             return;
-        } else if(currentPBall[0] > currentPosition[0] + 60 && currentPBall[0] <= currentPosition[0] + userWidth + 5){
-            setTimeout(moveTheBallUp, 20, -5);
+        } 
+        else if(currentPBall[0] > currentPosition[0] + userWidth/3 * 2 && currentPBall[0] <= currentPosition[0] + userWidth + 5){
+            setTimeout(moveTheBall, 20, -5, getOpposite(ver));
             return;
         }
-
+        //Check if I hit a side of the user
     } else if(currentPBall[1] < 30 && currentPBall[1] > 10 && (currentPBall[0] == currentPosition[0] -5 || currentPBall[0] == currentPosition[0] + userWidth + 5)) {
-        if(currentPBall[0] == currentPosition[0] -5) {
-            setTimeout(moveTheBallUp, 20, -5);
+        if(currentPBall[0] === currentPosition[0] -5) {
+            setTimeout(moveTheBall, 20, -5, getOpposite(ver));
             return;
-        } else if(currentPBall[0] == currentPosition[0] + userWidth + 5) {t
-            setTimeout(moveTheBallUp, 20, 5);
+        } else if(currentPBall[0] === currentPosition[0] + userWidth + 5) {
+            setTimeout(moveTheBall, 20, 5, getOpposite(ver));
             return;
         }
     }
     
-    for(i = 0; i < blocks.length; i++){
-        if (currentPBall[1] >= blocks[i].bottom && currentPBall[1] <= blocks[i].bottom + blockHeight + 5 && currentPBall[0] == blocks[i].left){
-            hitBlock(i);
-            setTimeout(moveTheBallDown, 20, -5);
-            return;
-        } else if(currentPBall[1] >= blocks[i].bottom && currentPBall[1] <= blocks[i].bottom + blockHeight + 5 && currentPBall[0] == blocks[i].rightCorner){
-            hitBlock(i);
-            setTimeout(moveTheBallDown, 20, 5);
-            return;
-        } else if(currentPBall[1] == blocks[i].bottom + blockHeight && currentPBall[0] >= blocks[i].left -5 && currentPBall[0] <= blocks[i].rightCorner + 5) {
-            hitBlock(i);
-            setTimeout(moveTheBallUp, 20, num);
-            return;
-        }
-    } 
+    //Check if I hit the grid
+    if (currentPBall[0] === 0){
+        setTimeout(moveTheBall, 20, 5, ver);
+        return;
+    } else if (currentPBall[0] === bordWidth){
+        setTimeout(moveTheBall, 20, -5, ver);
+        return;
+    } else if (currentPBall[1] === bordHeigth){
+        setTimeout(moveTheBall, 20, hor, getOpposite(ver)); 
+        return;      
+    }
     
-    if (currentPBall[0] == 0){
-        setTimeout(moveTheBallDown, 20, 5);
-        return;
-    } else if (currentPBall[0] == bordWidth){
-        setTimeout(moveTheBallDown, 20, -5);
-        return;
-    } 
-    
-    setTimeout(moveTheBallDown, 20, num);
 
-}
 
-function moveTheBallUp(num){
-    if (checkForWin()){
-        document.querySelector("h1").innerHTML = "Congrats you won! 😃"
-        return;
-        }
-
-    currentPBall[0] += num;
-    currentPBall[1] += 5;
-    refreshBallPosition();
+    //Check if I hit the bottom or side of a block
     for(i = 0; i < blocks.length; i ++){
-        if (currentPBall[1] == blocks[i].bottom && currentPBall[0] >= blocks[i].left -5 && currentPBall[0] <= blocks[i].rightCorner){
+        if (currentPBall[1] === blocks[i].bottom && currentPBall[0] >= blocks[i].left -5 && currentPBall[0] <= blocks[i].rightCorner){
             hitBlock(i);
-            setTimeout(moveTheBallDown, 20, num);
+            setTimeout(moveTheBall, 20, hor, getOpposite(ver));
             return;
-        } else if(currentPBall[1] >= blocks[i].bottom && currentPBall[1] <= blocks[i].bottom + blockHeight + 5 && currentPBall[0] == blocks[i].left){
+        } else if(currentPBall[1] >= blocks[i].bottom && currentPBall[1] <= blocks[i].bottom + blockHeight + 5 && currentPBall[0] === blocks[i].left){
             hitBlock(i);
-            setTimeout(moveTheBallUp, 20, -5);
+            setTimeout(moveTheBall, 20, -5, ver);
             return;
-        } else if(currentPBall[1] >= blocks[i].bottom && currentPBall[1] <= blocks[i].bottom + blockHeight + 5 && currentPBall[0] == blocks[i].rightCorner){
+        } else if(currentPBall[1] >= blocks[i].bottom && currentPBall[1] <= blocks[i].bottom + blockHeight + 5 && currentPBall[0] === blocks[i].rightCorner){
             hitBlock(i);
-            setTimeout(moveTheBallUp, 20, 5);
+            setTimeout(moveTheBall, 20, 5, ver);
+            return;
+        } else if(currentPBall[1] === blocks[i].bottom + blockHeight && currentPBall[0] >= blocks[i].left -5 && currentPBall[0] <= blocks[i].rightCorner + 5) {
+            hitBlock(i);
+            setTimeout(moveTheBall, 20, hor, 5);
             return;
         }
     } 
 
-    if (currentPBall[0] == 0){
-        setTimeout(moveTheBallUp, 20, 5);
-        return;
-    } else if (currentPBall[0] == bordWidth){
-        setTimeout(moveTheBallUp, 20, -5);
-        return;
-    } else if (currentPBall[1] == bordHeigth){
-        setTimeout(moveTheBallDown, 20, num);       
-    } else {
-        setTimeout(moveTheBallUp, 20, num);
-    }
-
+    setTimeout(moveTheBall, 20, hor, ver);
 
 }
 
@@ -222,5 +195,15 @@ function hitBlock(i){
 }
 
 function checkForWin(){
-    return visualBlocks.length == 0;
+    return visualBlocks.length === 0;
+}
+
+function getOpposite (num){
+    if (num > 0){
+        return num - (num * 2);
+    } else if (num < 0){
+        return num + (num * -2);
+    } else if (num === 0){
+        return num;
+    }
 }
