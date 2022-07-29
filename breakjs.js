@@ -160,9 +160,13 @@ function moveTheBall(hor, ver){
     //Check if I hit the bottom or side of a block
     for(i = 0; i < blocks.length; i ++){
         if (currentPBall[1] === blocks[i].bottom && currentPBall[0] >= blocks[i].left -5 && currentPBall[0] <= blocks[i].rightCorner){
-            hitBlock(i);
-            setTimeout(moveTheBall, 20, hor, getOpposite(ver));
-            return;
+            if(ver === -5){
+                continue;
+            } else {
+                hitBlock(i);
+                setTimeout(moveTheBall, 20, hor, getOpposite(ver), ball, visualBall);
+                return;
+            }
         } else if(currentPBall[1] >= blocks[i].bottom && currentPBall[1] <= blocks[i].bottom + blockHeight + 5 && currentPBall[0] === blocks[i].left){
             hitBlock(i);
             setTimeout(moveTheBall, 20, -5, ver);
