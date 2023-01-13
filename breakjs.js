@@ -164,7 +164,7 @@ function moveTheBall(hor, ver){
                 continue;
             } else {
                 hitBlock(i);
-                setTimeout(moveTheBall, 20, hor, getOpposite(ver), ball, visualBall);
+                setTimeout(moveTheBall, 20, hor, getOpposite(ver));
                 return;
             }
         } else if(currentPBall[1] >= blocks[i].bottom && currentPBall[1] <= blocks[i].bottom + blockHeight + 5 && currentPBall[0] === blocks[i].left){
